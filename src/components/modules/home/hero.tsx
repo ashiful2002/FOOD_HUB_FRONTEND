@@ -43,7 +43,7 @@ export default function HeroCarousel() {
     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto mt-12 overflow-hidden rounded-xl shadow-xl">
+    <div className="relative w-full max-w-6xl  mx-auto mt-2 overflow-hidden rounded shadow-xl">
       {/* Slides */}
       <AnimatePresence initial={false}>
         <motion.div
@@ -58,7 +58,7 @@ export default function HeroCarousel() {
             src={slides[current].image}
             alt={slides[current].title}
             fill
-            className="object-cover rounded-xl"
+            className="object-cover rounded -xl"
             sizes="(max-width: 768px) 100vw, 100vw"
           />
           {/* <div className="absolute bottom-8 left-8 sm:left-12 bg-black/50 backdrop-blur-md p-6 rounded-lg max-w-md text-white">
@@ -76,7 +76,7 @@ export default function HeroCarousel() {
           variant="outline"
           size="icon"
           onClick={prevSlide}
-          className="bg-black/30 hover:bg-black/60 text-white"
+          className="bg-black/30 hover:bg-black/60 text-white hover:text-white cursor-pointer"
         >
           <ChevronLeft size={24} />
         </Button>
@@ -84,7 +84,7 @@ export default function HeroCarousel() {
           variant="outline"
           size="icon"
           onClick={nextSlide}
-          className="bg-black/30 hover:bg-black/60 text-white"
+          className="bg-black/30 hover:bg-black/60 text-white hover:text-white cursor-pointer"
         >
           <ChevronRight size={24} />
         </Button>

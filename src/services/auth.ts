@@ -15,12 +15,14 @@ export const registerUser = async (userData: FieldValues) => {
         },
         body: JSON.stringify(userData),
       }
-    );
+    ); 
 
     const result = await res.json();
+    console.log(result);
 
     // If your backend also returns token after register
     const storeCookie = await cookies();
+
     if (result.success && result?.data?.token) {
       storeCookie.set("token", result.data.token);
     }
@@ -56,7 +58,9 @@ export const loginUser = async (userData: FieldValues) => {
 // get user
 export const getUser = async () => {
   const storeCookie = await cookies();
+
   const token = storeCookie.get("token")?.value;
+  
   let decodedData = null;
   if (token) {
     decodedData = await jwtDecode(token);

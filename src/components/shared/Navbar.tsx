@@ -1,29 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import LogOut from "../modules/auth/logout/LogOut";
+import Logo from "./logo";
+import { getUser } from "@/services/auth";
+import { UserTypes } from "@/types";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<UserTypes | null>(null);
+  const pathname = usePathname();
 
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
-    { name: "browse meal", href: "/meal" },
+    { name: "Browse Meal", href: "/meal" },
   ];
 
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const userData = await getUser();
+      setUser(userData);
+    };
+    getCurrentUser();
+  }, []);
+  // console.log(user);
+  const firstName = user?.name?.trim()?.split(" ")?.[0] || "";
   return (
-    <nav className="w-full border-b bg-background">
+    <nav className="w-full border-b bg-background sticky top-0 z-50">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        {/* Logo */}
-        <Link href="/" className="text-xl font-bold">
-          Food Hub
-        </Link>
+        <Logo />
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6">
@@ -31,44 +43,62 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm font-medium transition-colors ${
+                pathname === link.href
+                  ? "text-red-500"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               {link.name}
             </Link>
           ))}
-          <Link href={"/login"}>
-            <Button>Login</Button>
-          </Link>
-          <>
-            <LogOut />
-          </>
+
+          {user ? (
+            <>
+              <Link href={"/dashboard"}>
+                <Button>Dashboard</Button>
+              </Link>
+              <LogOut />
+            </>
+          ) : (
+            <Link href={"/login"}>
+              <Button>Login</Button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu */}
         <div className="md:hidden">
+          {firstName}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="flex flex-col gap-6 mt-10">
+            <SheetContent
+              side="right"
+              className="flex flex-col gap-3 px-3 pt-3"
+            >
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="text-lg font-medium"
+                  className={`text-lg font-medium transition-colors ${
+                    pathname === link.href ? "text-red-500" : "text-gray-800"
+                  }`}
                 >
                   {link.name}
                 </Link>
               ))}
-              <Link href={"/login"}>
-                <Button>Login</Button>
-              </Link>
-              <>
+              {user ? (
                 <LogOut />
-              </>
+              ) : (
+                <Link href={"/login"}>
+                  <Button>Login</Button>
+                </Link>
+              )}
             </SheetContent>
           </Sheet>
         </div>
