@@ -7,7 +7,6 @@ export default async function Page({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const user = await getUser();
   const { id } = await params;
   const { data } = await getSingleMeal(id);
   return (

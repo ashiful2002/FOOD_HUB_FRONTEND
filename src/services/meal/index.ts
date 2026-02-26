@@ -1,15 +1,37 @@
 "use server";
+
+import { cookies } from "next/headers";
+
+export const createMeal = async (MealData: any) => {
+  try {
+    const storeCookie = await cookies();
+    const token = storeCookie.get("token")?.value;
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meals`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token!,
+      },
+      body: JSON.stringify(MealData),
+    });
+    const result = await res.json();
+    console.log(result);
+    // return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getAllMeal = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meal`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meals`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "no-store",
-      // next: {
-      //   revalidate: 20,
-      // },
+      // cache: "no-store",
+      next: {
+        revalidate: 20,
+      },
     });
     const result = res.json();
     return result;
@@ -19,7 +41,7 @@ export const getAllMeal = async () => {
 };
 export const getSingleMeal = async (id: string) => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meal/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meals/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

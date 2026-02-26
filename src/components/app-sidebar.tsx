@@ -25,31 +25,15 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import LogOut from "./modules/auth/logout/LogOut";
 
-// This is sample data.
 const data = {
   user: {
     name: "Food Hub",
     email: "support@foodhub.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    // {
-    //   name: "Acme Inc",
-    //   logo: GalleryVerticalEnd,
-    //   plan: "Enterprise",
-    // },
-    // {
-    //   name: "Acme Corp.",
-    //   logo: AudioWaveform,
-    //   plan: "Startup",
-    // },
-    // {
-    //   name: "Evil Corp.",
-    //   logo: Command,
-    //   plan: "Free",
-    // },
-  ],
+  teams: [],
   navMain: [
     {
       title: "AdminDashboard",
@@ -169,16 +153,21 @@ const provider_dash = [
     isActive: true,
     items: [
       {
-        title: "History",
-        url: "#",
+        title: "Provider-dashboard",
+        url: "/dashboard",
       },
       {
-        title: "Starred",
-        url: "#",
+        title: "Add Menu",
+        url: "/add-menu",
+      },
+
+      {
+        title: "Manage Menu",
+        url: "/provider/menu",
       },
       {
-        title: "Settings",
-        url: "#",
+        title: "Orders",
+        url: "/provider/orders",
       },
     ],
   },
@@ -196,10 +185,6 @@ const customer_dash = [
       },
       {
         title: "Starred",
-        url: "#",
-      },
-      {
-        title: "Settings",
         url: "#",
       },
     ],
@@ -230,7 +215,8 @@ export function AppSidebar({ userRole, ...props }: AppSidebarProps) {
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {/* <NavUser user={data.user} /> */}
+        <LogOut />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

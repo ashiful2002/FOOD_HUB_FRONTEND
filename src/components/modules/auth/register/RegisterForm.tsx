@@ -25,13 +25,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { registerUser } from "@/services/auth"; 
+import { registerUser } from "@/services/auth";
 import Link from "next/link";
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(6),
+  role: z.enum(["CUSTOMER", "PROVIDER"]),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -45,6 +46,7 @@ export function RegisterForm() {
       name: "",
       email: "",
       password: "",
+      role: "CUSTOMER",
     },
   });
 
@@ -90,7 +92,22 @@ export function RegisterForm() {
                 </FormItem>
               )}
             />
-
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Register As</FormLabel>
+                  <FormControl>
+                    <select className="w-full border rounded-md p-2" {...field}>
+                      <option value="CUSTOMER">Customer</option>
+                      <option value="PROVIDER">Provider</option>
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Email */}
             <FormField
               control={form.control}

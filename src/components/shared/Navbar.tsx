@@ -26,9 +26,28 @@ export default function Navbar() {
   }, []);
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
     { name: "Browse Meal", href: "/meal" },
-    { name: "Profile", href: "/profile" },
+    //  meal details
+    { name: "Providers", href: "/providers" },
+    // provider details
+
+    // customer routes
+    { name: "Card", href: "/cart" },
+    { name: "Checkout", href: "/checkout" },
+    { name: "My Orders", href: "/orders" },
+    // order details /:id
+    { name: "profile", href: "/profile" },
+
+    // provider routes
+    { name: "Dashboard", href: "/provider/dashboard" },
+    { name: "Menu", href: "/provider/menu" },
+    { name: "Orders", href: "/provider/orders" },
+
+    // admin routes
+    { name: "Dashboard", href: "/admin" },
+    { name: "Users", href: "/admin/users" }, // manage uesrs
+    { name: "Orders", href: "/admin/orders" }, // all orders
+    { name: "Categories", href: "/admin/categories" }, // Manage categories
   ];
   const firstName = user?.name?.trim()?.split(" ")?.[0] || "";
   return (

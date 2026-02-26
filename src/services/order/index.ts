@@ -16,12 +16,6 @@ export const createBooking = async (bookingData: any) => {
     });
     const result = await res.json();
     console.log(result);
-
-    // if (result.success && result?.data?.token) {
-    //   storeCookie.set("token", result.data.token);
-    // }
-    // console.log(result);
-
     return result;
   } catch (error) {
     console.log(error);
