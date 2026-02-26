@@ -1,6 +1,12 @@
 import Image from "next/image";
+import { getUser } from "@/services/auth";
+import OrderButtonWrapper from "./OrderButtonWrapper";
+import { Button } from "@/components/ui/button";
 
-const MealDetails = ({ meal }: any) => {
+const MealDetails = async ({ meal }: any) => {
+  const user = await getUser();
+  console.log(user);
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="grid md:grid-cols-2 gap-10">
@@ -11,27 +17,39 @@ const MealDetails = ({ meal }: any) => {
             width={400}
             src={meal.image}
             alt={meal.name}
-             className="object-cover"
+            className="object-cover"
           />
         </div>
 
         {/* Meal Info */}
         <div>
-          <h1 className="text-3xl font-bold mb-3">{meal.name}</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold mb-3">{meal.name}</h1>
+            <p className="text-2xl font-semibold text-green-600 mb-3">
+              ৳ {meal.price}
+            </p>
+          </div>
           <p className="text-gray-600 mb-4">{meal.description}</p>
 
-          <p className="text-2xl font-semibold text-green-600 mb-3">
-            ৳ {meal.price}
-          </p>
-
           <div className="space-y-2 text-sm text-gray-700">
-            <p>Category ID: {meal.categoryId}</p>
+            <p>Category: {meal.category?.name}</p>{" "}
             <p>Available: {meal.isAvailable ? "Yes" : "No"}</p>
             <p>Views: {meal.views}</p>
             <p>Average Rating: {meal.averageRating}</p>
             <p>Total Reviews: {meal.totalReviews}</p>
             <p>Dietary: {meal.dietary.join(", ")}</p>
           </div>
+          {/* cart and buy section  */}
+          {/* <p className="text-2xl font-semibold text-green-600 mb-3">
+            ৳ {meal.price}
+          </p> */}
+          <Button variant={"outline"} className="w-full cursor-pointer">
+            Add to cart
+          </Button>
+          <OrderButtonWrapper 
+            meal={meal}
+            user={user}
+          />
 
           {/* Provider Info */}
           <div className="mt-6 p-4 border rounded-lg">

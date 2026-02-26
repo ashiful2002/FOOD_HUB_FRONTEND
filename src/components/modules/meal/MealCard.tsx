@@ -36,7 +36,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         {/* Product Name & Category */}
-        <h3 className="text-lg font-semibold capitalize">{product.name}</h3>
+        <div className="flex justify-between ">
+          <h3 className="text-lg font-semibold capitalize">{product.name}</h3>
+          <p className="font-bold text-lg">৳{product.price}</p>
+        </div>
+
         <p className="text-xs text-gray-500">{product.category?.name}</p>
 
         {/* Description */}
@@ -69,15 +73,27 @@ const ProductCard = ({ product }: ProductCardProps) => {
           >
             {product.isAvailable ? "Available" : "Out of Stock"}
           </span>
+          {/* <p className="font-bold text-lg">৳{product.price}</p> */}
         </div>
       </CardContent>
 
       {/* Footer */}
-      <CardFooter className="flex flex-col gap-2">
-        <p className="font-bold text-lg">৳{product.price}</p>
-        <Link href={`/meal/${product.id}`}>
-          <Button className="w-full">View Product</Button>
-        </Link>
+      <CardFooter className="">
+        <div className="flex items-center justify-between gap-4 ">
+          <Link href={`/meal/${product.id}`}>
+            <Button size={"xs"} variant={"outline"} className=" cursor-pointer">
+              Add to cart
+            </Button>
+          </Link>
+          <Link href={`/meal/${product.id}`}>
+            <Button
+              size={"xs"}
+              className="bg-red-500/90 text-yellow-300 font-bold cursor-pointer"
+            >
+              View Product
+            </Button>
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );

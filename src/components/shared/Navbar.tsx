@@ -17,13 +17,6 @@ export default function Navbar() {
   const [user, setUser] = useState<UserTypes | null>(null);
   const pathname = usePathname();
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Browse Meal", href: "/meal" },
-    { name: "Profile", href: "/profile" },
-  ];
-
   useEffect(() => {
     const getCurrentUser = async () => {
       const userData = await getUser();
@@ -31,7 +24,12 @@ export default function Navbar() {
     };
     getCurrentUser();
   }, []);
-  // console.log(user);
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Browse Meal", href: "/meal" },
+    { name: "Profile", href: "/profile" },
+  ];
   const firstName = user?.name?.trim()?.split(" ")?.[0] || "";
   return (
     <nav className="w-full border-b bg-background sticky top-0 z-50">

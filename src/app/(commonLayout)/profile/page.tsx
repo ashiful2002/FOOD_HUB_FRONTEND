@@ -3,9 +3,15 @@
 import { getProfile } from "@/services/profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import LogOut from "@/components/modules/auth/logout/LogOut";
+import UpdateProfileModal from "@/components/modules/auth/profile/UpdateProfileModal";
+
+const ROLE_COLORS: Record<string, string> = {
+  ADMIN: "bg-red-500",
+  PROVIDER: "bg-purple-500",
+  USER: "bg-blue-500",
+};
 
 const ProfilePage = async () => {
   const res = await getProfile();
@@ -19,10 +25,11 @@ const ProfilePage = async () => {
     );
   }
 
+  const hasAddress = user.street || user.city || user.postalCode;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-100 flex items-center justify-center p-6">
       <Card className="w-full max-w-2xl shadow-2xl rounded-2xl border-none">
-        {/* Header */}
         <CardHeader className="flex flex-col items-center gap-4 text-center">
           <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
             <AvatarImage src={user.avatar || ""} />
@@ -33,56 +40,84 @@ const ProfilePage = async () => {
 
           <CardTitle className="text-2xl font-bold">{user.name}</CardTitle>
 
-          <div className="flex gap-2">
-            <Badge
-              className={`${
-                user.role === "ADMIN" ? "bg-red-500" : "bg-blue-500"
-              } text-white`}
-            >
+          <div className="flex gap-2 flex-wrap justify-center">
+            <Badge className={`${ROLE_COLORS[user.role] ?? "bg-gray-500"} text-white`}>
               {user.role}
             </Badge>
-
             <Badge
               variant="outline"
-              className={`${
+              className={
                 user.status === "ACTIVE"
                   ? "border-green-500 text-green-600"
                   : "border-gray-400 text-gray-500"
-              }`}
+              }
             >
               {user.status}
             </Badge>
           </div>
         </CardHeader>
 
-        {/* Body */}
         <CardContent className="space-y-6 mt-4">
-          {/* Contact Info */}
+          {/* Contact */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <p className="text-sm text-gray-500">Email</p>
               <p className="font-medium">{user.email}</p>
             </div>
-
             <div>
               <p className="text-sm text-gray-500">Phone</p>
-              <p className="font-medium">{user.phone}</p>
+              <p className="font-medium">{user.phone ?? "—"}</p>
             </div>
           </div>
 
-          {/* Account Info */}
+          {/* Address */}
           <div>
-            <p className="text-sm text-gray-500">Account Created</p>
-            <p className="font-medium">
-              {new Date(user.createdAt).toLocaleDateString()}
-            </p>
+            <p className="text-sm text-gray-500 mb-2">Address</p>
+            {hasAddress ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {user.street && (
+                  <div>
+                    <p className="text-xs text-gray-400">Street</p>
+                    <p className="font-medium">{user.street}</p>
+                  </div>
+                )}
+                {user.city && (
+                  <div>
+                    <p className="text-xs text-gray-400">City</p>
+                    <p className="font-medium">{user.city}</p>
+                  </div>
+                )}
+                {user.postalCode && (
+                  <div>
+                    <p className="text-xs text-gray-400">Postal Code</p>
+                    <p className="font-medium">{user.postalCode}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="font-medium text-gray-400 italic">No address provided</p>
+            )}
           </div>
 
-          {/* Action Buttons */}
+          {/* Dates */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <p className="text-sm text-gray-500">Account Created</p>
+              <p className="font-medium">
+                {new Date(user.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Last Updated</p>
+              <p className="font-medium">
+                {new Date(user.updatedAt).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+
+          {/* Actions */}
           <div className="flex justify-end gap-3 pt-4">
-            <Button variant="destructive" className="bg-blue-500">
-              Edit Profile
-            </Button>
+            <UpdateProfileModal user={user} />
             <LogOut />
           </div>
         </CardContent>
