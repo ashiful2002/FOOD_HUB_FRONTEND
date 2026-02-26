@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/shared/Navbar";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner";
 
@@ -25,6 +24,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  
   return (
     <html lang="en">
       <body

@@ -21,6 +21,7 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Browse Meal", href: "/meal" },
+    { name: "Profile", href: "/profile" },
   ];
 
   useEffect(() => {
@@ -72,8 +73,8 @@ export default function Navbar() {
           {firstName}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
+              <Button variant="ghost" size={"icon"}>
+                <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
             <SheetContent
