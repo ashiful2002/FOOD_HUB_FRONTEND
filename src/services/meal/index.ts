@@ -2,25 +2,26 @@
 
 import { cookies } from "next/headers";
 
-export const createMeal = async (MealData: any) => {
-  try {
-    const storeCookie = await cookies();
-    const token = storeCookie.get("token")?.value;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meals`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token!,
-      },
-      body: JSON.stringify(MealData),
-    });
-    const result = await res.json();
-    console.log(result);
-    // return result;
-  } catch (error) {
-    console.log(error);
-  }
+export const createMeal = async (mealData: any) => {
+  const storeCookie = await cookies();
+  const token = storeCookie.get("token")?.value;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meals`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token!,
+    },
+    body: JSON.stringify(mealData),
+  });
+  const result = await res.json();
+
+  console.log("backend response", result)
+  console.log("res", res)
+
+  return result;
 };
+
 export const getAllMeal = async () => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meals`, {

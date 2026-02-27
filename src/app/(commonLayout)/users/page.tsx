@@ -1,5 +1,5 @@
 const page = () => {
-  return <div>add meal menu</div>;
+  return <div>Admin manage page</div>;
 };
 
 export default page;

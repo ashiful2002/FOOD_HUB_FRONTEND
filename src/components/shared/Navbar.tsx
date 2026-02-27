@@ -16,39 +16,52 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<UserTypes | null>(null);
   const pathname = usePathname();
+  // console.log(user);
 
   useEffect(() => {
     const getCurrentUser = async () => {
       const userData = await getUser();
       setUser(userData);
     };
+
     getCurrentUser();
   }, []);
-  const navLinks = [
+  const navLinks: any[] = [
     { name: "Home", href: "/" },
     { name: "Browse Meal", href: "/meal" },
     //  meal details
-    { name: "Providers", href: "/providers" },
-    // provider details
+    { name: "Providers", href: "/providers" }, // provider details// Manage categories
+  ];
 
+  const customer_navs = [
     // customer routes
-    { name: "Card", href: "/cart" },
+    { name: "Cart", href: "/cart" },
     { name: "Checkout", href: "/checkout" },
-    { name: "My Orders", href: "/orders" },
-    // order details /:id
+    { name: "My Orders", href: "/orders" }, // order details /:id
     { name: "profile", href: "/profile" },
-
+  ];
+  const provider_navs = [
     // provider routes
-    { name: "Dashboard", href: "/provider/dashboard" },
     { name: "Menu", href: "/provider/menu" },
     { name: "Orders", href: "/provider/orders" },
-
+  ];
+  const admin_navs = [
     // admin routes
-    { name: "Dashboard", href: "/admin" },
     { name: "Users", href: "/admin/users" }, // manage uesrs
     { name: "Orders", href: "/admin/orders" }, // all orders
     { name: "Categories", href: "/admin/categories" }, // Manage categories
   ];
+
+  if (user?.role === "PROVIDER") {
+    navLinks.push(...provider_navs);
+  } else if (user?.role === "ADMIN") {
+    navLinks.push(...admin_navs);
+  } else if (user?.role == "CUSTOMER") {
+    navLinks.push(...customer_navs);
+  } else {
+    navLinks;
+  }
+
   const firstName = user?.name?.trim()?.split(" ")?.[0] || "";
   return (
     <nav className="w-full border-b bg-background sticky top-0 z-50">
@@ -71,13 +84,15 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {user ? (
+          {user?.role === "PROVIDER" || user?.role === "ADMIN" ? (
             <>
               <Link href={"/dashboard"}>
                 <Button>Dashboard</Button>
               </Link>
               <LogOut />
             </>
+          ) : user?.role === "CUSTOMER" ? (
+            <LogOut />
           ) : (
             <Link href={"/login"}>
               <Button>Login</Button>

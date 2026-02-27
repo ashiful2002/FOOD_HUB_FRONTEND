@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createBooking } from "@/services/order";
+// import { createBooking } from "@/services/order";
 import { toast } from "sonner";
 
 // ---- TYPES ----
@@ -86,18 +86,18 @@ export function OrderModal({ meal, customer }: OrderModalProps) {
       ],
     };
 
-    try {
-      const res = await createBooking(payload);
-      console.log(res);
+    // try {
+    //   const res = await createBooking(payload);
+    //   console.log(res);
 
-      if (res.success) {
-        toast.success(res.message, { position: "top-right" });
-      } else {
-        toast.info("failed");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    //   if (res.success) {
+    //     toast.success(res.message, { position: "top-right" });
+    //   } else {
+    //     toast.info("failed");
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
     setLoading(false);
 
     setOpen(false);

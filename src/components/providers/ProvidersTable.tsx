@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import {  ArrowBigRight } from "lucide-react";
+import { ArrowBigRight } from "lucide-react";
 
 type Provider = {
   id: string;
@@ -26,7 +26,7 @@ export default function ProvidersTable({
   providers: Provider[];
 }) {
   const router = useRouter();
-
+  console.table(providers);
   return (
     <Table>
       <TableHeader>

@@ -10,12 +10,13 @@ export const getAllProviders = async () => {
         revalidate: 20,
       },
     });
-    const result = res.json();
+    const result = await res.json();
     return result;
   } catch (error: any) {
     return Error(error);
   }
 };
+
 export const getSingleProvider = async (id: string) => {
   try {
     const res = await fetch(
@@ -26,12 +27,11 @@ export const getSingleProvider = async (id: string) => {
           "Content-Type": "application/json",
         },
         cache: "no-store",
-        // next: {
-        //   revalidate: 20,
-        // },
       }
     );
-    const result = res.json();
+    console.log(res);
+
+    const result = await res.json();
     return result;
   } catch (error: any) {
     return Error(error);

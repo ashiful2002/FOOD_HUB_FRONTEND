@@ -2,15 +2,46 @@
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Star } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
-  product: any; // ideally define proper type
+  product: any;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const router = useRouter();
+
+ const handleAddToCart = () => {
+    // Get existing cart from session storage
+    const existingCart = JSON.parse(sessionStorage.getItem("cart") || "[]");
+
+    // Enforce single provider
+    if (
+      existingCart.length > 0 &&
+      existingCart[0].provider.id !== product.provider.id
+    ) {
+      toast.error("You can only order from one restaurant at a time");
+      return;
+    }
+
+    // Add product to cart
+    const newCart = [
+      ...existingCart,
+      {
+        ...product,
+        quantity: 1,
+      },
+    ];
+
+    sessionStorage.setItem("cart", JSON.stringify(newCart));
+    toast.success("Added to cart!");
+
+    // Navigate to /cart
+    router.push("/cart");
+  };
   return (
     <Card className="hover:shadow-lg transition-shadow duration-200">
       <Image
@@ -21,7 +52,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
         className="object-cover mx-auto rounded"
       />
 
-      {/* Content */}
       <CardContent className="space-y-2">
         {/* Provider */}
         <div className="flex items-center gap-2 mb-2">
@@ -35,18 +65,21 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </span>
         </div>
 
-        {/* Product Name & Category */}
-        <div className="flex justify-between ">
-          <h3 className="text-lg font-semibold capitalize">{product.name}</h3>
+        <div className="flex justify-between">
+          <h3 className="text-lg font-semibold capitalize">
+            {product.name}
+          </h3>
           <p className="font-bold text-lg">৳{product.price}</p>
         </div>
 
-        <p className="text-xs text-gray-500">{product.category?.name}</p>
+        <p className="text-xs text-gray-500">
+          {product.category?.name}
+        </p>
 
-        {/* Description */}
-        <p className="text-sm text-gray-600">{product.description}</p>
+        <p className="text-sm text-gray-600">
+          {product.description}
+        </p>
 
-        {/* Dietary Tags */}
         <div className="flex gap-1">
           {product.dietary.map((tag: string) => (
             <span
@@ -58,7 +91,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
           ))}
         </div>
 
-        {/* Rating & Availability */}
         <div className="flex items-center justify-between text-sm text-gray-600 mt-1">
           <div className="flex items-center gap-1">
             <Star className="w-4 h-4 text-yellow-400" />
@@ -68,32 +100,26 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
           <span
             className={`font-medium ${
-              product.isAvailable ? "text-green-600" : "text-red-600"
+              product.isAvailable
+                ? "text-green-600"
+                : "text-red-600"
             }`}
           >
-            {product.isAvailable ? "Available" : "Out of Stock"}
+            {product.isAvailable
+              ? "Available"
+              : "Out of Stock"}
           </span>
-          {/* <p className="font-bold text-lg">৳{product.price}</p> */}
         </div>
       </CardContent>
 
-      {/* Footer */}
-      <CardFooter className="">
-        <div className="flex items-center justify-between gap-4 ">
-          <Link href={`/meal/${product.id}`}>
-            <Button size={"xs"} variant={"outline"} className=" cursor-pointer">
-              Add to cart
-            </Button>
-          </Link>
-          <Link href={`/meal/${product.id}`}>
-            <Button
-              size={"xs"}
-              className="bg-red-500/90 text-yellow-300 font-bold cursor-pointer"
-            >
-              View Product
-            </Button>
-          </Link>
-        </div>
+      <CardFooter>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleAddToCart}
+        >
+          Add to cart
+        </Button>
       </CardFooter>
     </Card>
   );

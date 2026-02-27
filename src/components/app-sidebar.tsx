@@ -131,16 +131,16 @@ const admin_dash = [
     isActive: true,
     items: [
       {
-        title: "History",
-        url: "#",
+        title: "Users",
+        url: "/dashboard/users",
       },
       {
-        title: "Starred",
-        url: "#",
+        title: "Orders",
+        url: "/dashboard/orders",
       },
       {
-        title: "Settings",
-        url: "#",
+        title: "Categories",
+        url: "/dashboard/categories",
       },
     ],
   },
@@ -152,13 +152,17 @@ const provider_dash = [
     icon: SquareTerminal,
     isActive: true,
     items: [
+      // {
+      //   title: "Provider-dashboard",
+      //   url: "/dashboard",
+      // },
       {
         title: "Provider-dashboard",
-        url: "/dashboard",
+        url: "/provider/dashboard",
       },
       {
         title: "Add Menu",
-        url: "/add-menu",
+        url: "/provider/add-menu",
       },
 
       {

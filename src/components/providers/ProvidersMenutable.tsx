@@ -45,7 +45,7 @@ const ProvidersMenutable = ({ meals }: Props) => {
           </TableHeader>
 
           <TableBody>
-            {meals.map((meal) => (
+            {meals?.map((meal) => (
               <TableRow key={meal.id}>
                 <TableCell>
                   <Image
