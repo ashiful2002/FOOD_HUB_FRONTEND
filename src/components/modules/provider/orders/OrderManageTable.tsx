@@ -36,11 +36,9 @@ const OrderManageTable = ({
   updateOrderStatus,
 }: OrderManageTableProps) => {
 
-  // ✅ Local state
   const [orders, setOrders] = useState(providersOrder);
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
 
-  // If parent updates data, sync again
   useEffect(() => {
     setOrders(providersOrder);
   }, [providersOrder]);
@@ -53,7 +51,6 @@ const OrderManageTable = ({
         const result = await updateOrderStatus(orderId, status);
 
         if (result?.success) {
-          // ✅ Update local UI instantly
           setOrders((prev) =>
             prev.map((order) =>
               order.id === orderId ? { ...order, status } : order

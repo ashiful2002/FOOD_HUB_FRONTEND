@@ -7,12 +7,16 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { data: orderData } = await getSingleOrder(id);
-  console.log(orderData);
+  try {
+    const { data: orderData } = await getSingleOrder(id);
+    console.log(orderData);
 
-  return (
-    <div>
-      <OrderDetails order={orderData} />
-    </div>
-  );
+    return (
+      <div>
+        <OrderDetails order={orderData} />
+      </div>
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }

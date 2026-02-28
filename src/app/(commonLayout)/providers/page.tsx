@@ -4,11 +4,17 @@ import ProvidersTable from "@/components/providers/ProvidersTable";
 import { getAllProviders } from "@/services/providers";
 
 const page = async () => {
-  const { data } = await getAllProviders();
+  const response = await getAllProviders();
+
+  const providers = Array.isArray(response?.data)
+    ? response.data
+    : response?.data
+    ? [response.data]
+    : [];
 
   return (
     <div className="p-6">
-      <ProvidersTable providers={data} />
+      <ProvidersTable providers={providers} />
     </div>
   );
 };

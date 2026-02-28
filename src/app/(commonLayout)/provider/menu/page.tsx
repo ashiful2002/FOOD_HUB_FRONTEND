@@ -1,6 +1,7 @@
 import ProvidersMenu from "@/components/modules/provider/ProvidersMenu";
+import { getAllMeal } from "@/services/meal/index";
 
-const providersOwnOrder = () => {
+const providersOwnOrder = async () => {
   return (
     <div>
       <ProvidersMenu />

@@ -3,7 +3,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -17,8 +17,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
-import { createMeal } from "@/services/meal/index";
 import { toast } from "sonner";
+import { getCategories } from "@/services/category";
+import { createMeal } from "@/services/meal/index";
 
 const mealSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -32,8 +33,42 @@ const mealSchema = z.object({
 
 type MealFormData = z.infer<typeof mealSchema>;
 
+type Category = {
+  id: string;
+  name: string;
+};
+
+const DIETARY_OPTIONS: MealFormData["dietary"][number][] = [
+  "VEG",
+  "NON_VEG",
+  "VEGAN",
+];
+
 const MenuForm = () => {
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+  console.log(categories);
+
+  // ✅ Load categories correctly
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setCategoryLoading(true);
+        const response = await getCategories();
+
+        // adjust depending on API shape
+        setCategories(response.data || []);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load categories");
+      } finally {
+        setCategoryLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const {
     register,
@@ -50,19 +85,19 @@ const MenuForm = () => {
   });
 
   const onSubmit = async (data: MealFormData) => {
-    console.log(data);
-
     try {
       setLoading(true);
       const res = await createMeal(data);
+
       if (res.success) {
         reset();
         toast.success(res.message, { position: "top-right" });
       } else {
-        toast.info("failed");
+        toast.error("Failed to create meal");
       }
     } catch (error) {
       console.error(error);
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -81,6 +116,7 @@ const MenuForm = () => {
             <p className="text-red-500 text-sm">{errors.image.message}</p>
           )}
         </div>
+
         {/* Name */}
         <div>
           <Label>Meal Name</Label>
@@ -111,9 +147,10 @@ const MenuForm = () => {
           )}
         </div>
 
-        {/* Category (FIXED) */}
+        {/* Category (Dynamic) */}
         <div>
           <Label>Category</Label>
+
           <Controller
             name="categoryId"
             control={control}
@@ -122,30 +159,38 @@ const MenuForm = () => {
                 <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
+
                 <SelectContent>
-                  <SelectItem value="259abcd5-c531-45ad-9af4-ca7a1774c4f4">
-                    Biryani
-                  </SelectItem>
-                  <SelectItem value="dessert-id">Dessert</SelectItem>
+                  {categoryLoading ? (
+                    <div className="p-2 text-sm">Loading...</div>
+                  ) : categories?.length === 0 ? (
+                    <div className="p-2 text-sm">No categories found</div>
+                  ) : (
+                    categories?.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             )}
           />
+
           {errors.categoryId && (
             <p className="text-red-500 text-sm">{errors.categoryId.message}</p>
           )}
         </div>
 
-        {/* Dietary (FIXED PROPER ARRAY HANDLING) */}
+        {/* Dietary */}
         <div>
           <Label>Dietary</Label>
-
           <Controller
             name="dietary"
             control={control}
             render={({ field }) => (
               <div className="flex gap-6 mt-2">
-                {["VEG", "NON-VEG", "VEGAN"].map((option) => {
+                {DIETARY_OPTIONS.map((option) => {
                   const checked = field.value?.includes(option);
 
                   return (
@@ -154,10 +199,12 @@ const MenuForm = () => {
                         checked={checked}
                         onCheckedChange={(isChecked) => {
                           if (isChecked) {
-                            field.onChange([...field.value, option]);
+                            field.onChange([...(field.value ?? []), option]);
                           } else {
                             field.onChange(
-                              field.value.filter((value) => value !== option)
+                              field.value?.filter(
+                                (value) => value !== option
+                              ) ?? []
                             );
                           }
                         }}
@@ -171,7 +218,7 @@ const MenuForm = () => {
           />
         </div>
 
-        {/* Availability (BOOLEAN FIXED) */}
+        {/* Availability */}
         <div className="flex items-center gap-2">
           <Controller
             name="isAvailable"
@@ -190,7 +237,7 @@ const MenuForm = () => {
         <Button
           type="submit"
           disabled={loading}
-          className="w-full h-11 text-lg cursor-pointer"
+          className="w-full h-11 text-lg"
         >
           {loading ? (
             <span className="flex items-center gap-2">

@@ -1,22 +1,7 @@
 "use client";
-
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
-
+import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
@@ -152,30 +137,24 @@ const provider_dash = [
     icon: SquareTerminal,
     isActive: true,
     items: [
-      // {
-      //   title: "Provider-dashboard",
-      //   url: "/dashboard",
-      // },
-      {
-        title: "Provider-dashboard",
-        url: "/provider/dashboard",
-      },
       {
         title: "Add Menu",
-        url: "/provider/add-menu",
+        url: "/dashboard/add-menu",
       },
 
       {
         title: "Manage Menu",
-        url: "/provider/menu",
+        url: "/dashboard/menu",
       },
       {
         title: "Orders",
-        url: "/provider/orders",
+        url: "/dashboard/orders",
       },
     ],
   },
 ];
+// customer routes
+
 const customer_dash = [
   {
     title: "customer Dashboard",
@@ -184,13 +163,13 @@ const customer_dash = [
     isActive: true,
     items: [
       {
-        title: "History",
-        url: "#",
+        title: "My Orders",
+        url: "/dashboard/orders",
       },
-      {
-        title: "Starred",
-        url: "#",
-      },
+      { title: "Cart", url: "/cart" },
+      { title: "Checkout", url: "/checkout" },
+      { title: "My Orders", url: "/orders" }, // order details /:id
+      { title: "profile", url: "/profile" },
     ],
   },
 ];

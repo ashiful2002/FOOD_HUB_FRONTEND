@@ -66,12 +66,6 @@ export const getSingleOrder = async (id: string) => {
     return Error(error);
   }
 };
-import { updateOrderStatus as updateOrderStatusService } from "@/services/order";
-
-export const updateOrderStatusAction = async (orderId: string, status: string) => {
-  return updateOrderStatusService(orderId, status);
-};
-
 export const updateOrderStatus = async (id: string, status: string) => {
   try {
     const store = await cookies();
@@ -80,7 +74,7 @@ export const updateOrderStatus = async (id: string, status: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/orders/${id}`,
       {
-        method: "PATCH", 
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: token!,
@@ -100,4 +94,8 @@ export const updateOrderStatus = async (id: string, status: string) => {
   } catch (error: any) {
     return Error(error.message || "Something went wrong");
   }
+};
+
+export const updateOrderStatusAction = async (orderId: string, status: string) => {
+  return updateOrderStatus(orderId, status);
 };

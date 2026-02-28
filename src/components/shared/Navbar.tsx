@@ -38,10 +38,12 @@ export default function Navbar() {
     { name: "Cart", href: "/cart" },
     { name: "Checkout", href: "/checkout" },
     { name: "My Orders", href: "/orders" }, // order details /:id
-    { name: "profile", href: "/profile" },
+    { name: "Profile", href: "/profile" },
+    { name: "Dashboard", href: "/dashboard" },
   ];
   const provider_navs = [
     // provider routes
+    { name: "Add Menu", href: "/provider/add-menu" },
     { name: "Menu", href: "/provider/menu" },
     { name: "Orders", href: "/provider/orders" },
   ];
@@ -54,12 +56,12 @@ export default function Navbar() {
 
   if (user?.role === "PROVIDER") {
     navLinks.push(...provider_navs);
-  } else if (user?.role === "ADMIN") {
+  }
+  if (user?.role === "ADMIN") {
     navLinks.push(...admin_navs);
-  } else if (user?.role == "CUSTOMER") {
+  }
+  if (user?.role == "CUSTOMER") {
     navLinks.push(...customer_navs);
-  } else {
-    navLinks;
   }
 
   const firstName = user?.name?.trim()?.split(" ")?.[0] || "";
@@ -102,7 +104,6 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <div className="md:hidden">
-          {firstName}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size={"icon"}>

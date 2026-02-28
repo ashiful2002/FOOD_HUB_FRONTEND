@@ -1,11 +1,7 @@
 import ProviderOrderForm from "@/components/modules/provider/orders/ProviderOrderForm";
 import { getSingleOrder } from "@/services/order";
 
-const ProviderOrderUpdatePage = async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
+const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   // Fetch order on the server
@@ -16,4 +12,4 @@ const ProviderOrderUpdatePage = async ({
   return <ProviderOrderForm order={data} />;
 };
 
-export default ProviderOrderUpdatePage;
+export default Page;

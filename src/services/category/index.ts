@@ -7,7 +7,7 @@ export const getCategories = async () => {
     const store = await cookies();
     const token = store.get("token")?.value;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/category`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/categories`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

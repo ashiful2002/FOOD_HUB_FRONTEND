@@ -1,18 +1,29 @@
-// app/provider/orders/GetProvidersOrders.tsx
+export const dynamic = "force-dynamic";
+
 import { getOrder, updateOrderStatusAction } from "@/services/order";
 import OrderManageTable from "./OrderManageTable";
 
 const GetProvidersOrders = async () => {
-  const { data: orderData } = await getOrder();
+  try {
+    const { data: orderData } = await getOrder();
 
-  return (
-    <div>
+    return (
+      <div>
+        <OrderManageTable
+          providersOrder={orderData ?? []}   // ✅ SAFE FALLBACK
+          updateOrderStatus={updateOrderStatusAction}
+        />
+      </div>
+    );
+  } catch (error) {
+    console.log(error);
+    return (
       <OrderManageTable
-        providersOrder={orderData}
-        updateOrderStatus={updateOrderStatusAction} // pass server action
+        providersOrder={[]}                 // ✅ ALSO SAFE ON ERROR
+        updateOrderStatus={updateOrderStatusAction}
       />
-    </div>
-  );
+    );
+  }
 };
 
 export default GetProvidersOrders;

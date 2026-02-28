@@ -5,12 +5,12 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getUser } from "@/services/auth";
 export default async function DashboardLayout({
   admin,
-  provider,
   customer,
+  provider,
 }: {
   admin: React.ReactNode;
-  provider: React.ReactNode;
   customer: React.ReactNode;
+  provider: React.ReactNode;
 }) {
   const user = await getUser();
 

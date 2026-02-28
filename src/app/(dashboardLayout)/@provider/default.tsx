@@ -1,3 +1,3 @@
-export const ProviderDashboard = () => {
+export const ProviderDefault = () => {
   return null;
 };
